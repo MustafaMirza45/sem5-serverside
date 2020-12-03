@@ -1,9 +1,11 @@
-const express= require('express')
+
+const express= require('express');
 const http = require('http');
-const morgan = require('morgan')
+const morgan = require('morgan');
 const bodyparser = require('body-parser');
 
 const cors = require('cors');
+
 const res_man = require('./operations/res_manager');
 const restaurant = require('./operations/restaurant');
 const hostname = 'localhost';

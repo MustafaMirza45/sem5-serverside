@@ -54,7 +54,7 @@ restaurant.route('/')
   });
   
 
-restaurant.route('/:chefId')
+restaurant.route('/:manId')
 //for dishid
 .all((req, res, next) =>{
     res.statusCode= 200;
@@ -62,7 +62,12 @@ restaurant.route('/:chefId')
     next();
 })
 .get((req,res,next)=>{
-    res.end('will send details of the chef: '+ req.params.chefId +' to you!');
+    connection.query('SELECT * FROM restaurant where Manager_ID ='+req.params.manId , (err,rows,fields) => {
+        if(err) throw err;
+      
+        console.log('Data received from Db:',rows);
+        res.send(rows);
+    });
   })
   
 .post( (req, res, next) => {

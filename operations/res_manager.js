@@ -5,7 +5,7 @@ const connection=require('./sql');
 connection.connect((err) => {
     
   if (err) throw err;
-      //console.log('Connected!');
+      console.log('Connected!');
     
 });
 const res_man = express.Router();
@@ -29,7 +29,8 @@ res_man.route('/')
   })
 .post( (req, res, next) => {
    
-    connection.query('select count(*) as cou from restaurant_manager where Manager_Name="'+req.body.Manager_Name+'";', (err,rows) => {
+    console.log(req.body);
+    /*connection.query('select count(*) as cou from restaurant_manager where Manager_Name="'+req.body.Manager_Name+'";', (err,rows) => {
         if(err) throw err;
       if(rows[0].cou ==0){
         connection.query('insert into restaurant_manager (Manager_Name,Manager_Email,Password,Join_date) values("'+ req.body.Manager_Name +'","'+ req.body.Manager_Email +'" , "'+req.body.Password + '", current_date());', (err,rows) => {
@@ -43,26 +44,31 @@ res_man.route('/')
           res.end('user exists');
       }
         
-    });
+    });*/
    })
 .put( (req, res, next) => {
     res.statusCode = 403;
-    res.end('PUT operation not supported on /chefs');
+    res.end('PUT operation not supported on /managers');
   })
 .delete((req, res, next) => {
     res.end('Deleting all the chefs!');
   });
   
 
-res_man.route('/:chefId')
+res_man.route('/:manId')
 //for dishid
 .all((req, res, next) =>{
     res.statusCode= 200;
-    res.setHeader('Content-Type','text/plain');
+    res.setHeader('Content-Type','application/json');
     next();
 })
 .get((req,res,next)=>{
-    res.end('will send details of the chef: '+ req.params.chefId +' to you!');
+    connection.query('SELECT * FROM restaurant_manager where Manager_ID = ' +req.params.manId , (err,rows,fields) => {
+        if(err) throw err;
+      
+        console.log('Data received from Db:',rows);
+        res.send(rows);
+    });
   })
   
 .post( (req, res, next) => {
